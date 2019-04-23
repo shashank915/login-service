@@ -1,0 +1,47 @@
+
+spring:
+  application:
+    name: login-service
+
+#  resources:
+#    add-mappings: false
+#  mvc:
+#    throw-exception-if-no-handler-found: true
+
+  profiles:
+    active: prod
+
+---
+#dev profile
+
+spring:
+  profiles: dev
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/user_db
+    username: root
+    password: 7777
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 9000
+
+
+---
+#Prod Profile
+spring:
+  profiles: prod
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://13.127.157.211:3306/userdatabase
+    username: dev
+    password: 7777
+
+server:
+  port: 9000
