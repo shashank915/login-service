@@ -89,11 +89,29 @@ public class UserPrincipal implements UserDetails {
             throw new RuntimeException("Please change the password before the first login");
         }
 
-
-        if(appUser.isActive() && appUser.getUserStatus() == UserState.COMPLETED && ((appUser.getEmail().equals(emailOrMobileNo) && appUser.isEmailVerified()) ||
-                (appUser.getMobile().equals(emailOrMobileNo) && appUser.isMobileNoVerified()))){
-            userActive = true;
+        if(appUser.isActive() && appUser.getUserStatus() == UserState.COMPLETED){
+            if(appUser.getEmail().equals(emailOrMobileNo)){
+                if(appUser.isEmailVerified()){
+                    userActive = true;
+                }
+                else {
+                    throw new RuntimeException("Please Verify your email Id");
+                }
+            }
+            else if(appUser.getMobile().equals(emailOrMobileNo)){
+                if(appUser.isMobileNoVerified()){
+                    userActive = true;
+                }
+                else {
+                    throw new RuntimeException("Please verify your mobileNo");
+                }
+            }
         }
+
+//        if(appUser.isActive() && appUser.getUserStatus() == UserState.COMPLETED && ((appUser.getEmail().equals(emailOrMobileNo) && appUser.isEmailVerified()) ||
+//                (appUser.getMobile().equals(emailOrMobileNo) && appUser.isMobileNoVerified()))){
+//            userActive = true;
+//        }
 
         return new UserPrincipal(appUser.getUserId(),appUser.getUserName(),appUser.getMobile(),appUser.getEmail(),appUser.getPassword(),grantedAuthorities,userActive);
     }
