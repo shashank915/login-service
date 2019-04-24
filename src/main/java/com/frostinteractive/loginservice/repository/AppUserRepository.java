@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface AppUserRepository extends CrudRepository<AppUser, String> {
 	
 	Optional<AppUser> findByUserName(String userName);
+	Optional<AppUser> findByEmailOrMobile(String mobile, String email);
 }

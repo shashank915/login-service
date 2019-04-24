@@ -3,6 +3,8 @@ package com.frostinteractive.loginservice.config;//package com.frostinteractive.
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,7 +22,9 @@ public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
 	private UserDetailsService userDetailsService;
 
 	@Autowired
-	private JwtConfig jwtConfig;
+	private JwtAuthenticationEntryPoint authenticationEntryPoint;
+
+	private JwtConfig jwtConfig = new JwtConfig();
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -30,7 +34,7 @@ public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 		// handle an authorized attempts
 		.exceptionHandling()
-		.authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED,e.getMessage())).and()
+		.authenticationEntryPoint(authenticationEntryPoint).and()
 		// Add a filter to validate user credentials and add token in the response
 		// header
 
@@ -38,12 +42,13 @@ public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
 		// An object provided by WebSecurityConfigurerAdapter, used to authenticate the
 		// user passing user's credentials
 		// The filter needs this auth manager to authenticate the user.
-		.addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig))
+//		.addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig))
 		.authorizeRequests()
 		// make pre-login URIs as authenticated
 		.antMatchers(HttpMethod.POST, jwtConfig.getUri()).permitAll()
 		// any other requests must be authenticated
 		.anyRequest().authenticated();
+
 	}
 
 	// Spring has UserDetailsService interface, which can be overriden to provide
@@ -58,12 +63,14 @@ public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	public JwtConfig jwtConfig() {
-		return new JwtConfig();
-	}
-
-	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+//	@Bean(BeanIds.AUTHENTICATION_MANAGER)
+	@Bean(value = "authenticationManager")
+	public AuthenticationManager getAuthenticationManager() throws Exception{
+		AuthenticationManager authenticationManager = super.authenticationManagerBean();
+		return authenticationManager;
 	}
 }

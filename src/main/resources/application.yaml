@@ -45,3 +45,12 @@ spring:
 
 server:
   port: 9000
+
+security:
+  jwt:
+    login-uri: /login
+    header: Authorization
+    prefix: Bearer
+    expiration: 86400 #{24*60*60}
+    secret: FrostLoginSecret
+
