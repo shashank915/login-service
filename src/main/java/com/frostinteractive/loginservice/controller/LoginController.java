@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
+
 @RestController
 public class LoginController {
 
@@ -35,10 +37,14 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody AppUserDTO appUserDTO){
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(appUserDTO.getEmailOrMobile(), appUserDTO.getPassword()
-                ));
+                new UsernamePasswordAuthenticationToken(appUserDTO.getEmailOrMobile(), appUserDTO.getPassword(), Collections.emptyList()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwtToken = tokenProvider.generateToken(authentication);
         return ResponseEntity.ok().header("Authorization",jwtToken).build();
     }
+
+//    @PostMapping("/logout")
+//    public ResponseEntity logout(String userId){
+//
+//    }
 }

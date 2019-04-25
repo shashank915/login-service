@@ -112,7 +112,7 @@ public class UserPrincipal implements UserDetails {
 //                (appUser.getMobile().equals(emailOrMobileNo) && appUser.isMobileNoVerified()))){
 //            userActive = true;
 //        }
-
-        return new UserPrincipal(appUser.getUserId(),appUser.getUserName(),appUser.getMobile(),appUser.getEmail(),appUser.getPassword(),grantedAuthorities,userActive);
+        UserPrincipal userPrincipal = new UserPrincipal(appUser.getUserId(), appUser.getUserName(), appUser.getEmail(),appUser.getMobile(), appUser.getPassword(), grantedAuthorities, userActive);
+        return userPrincipal;
     }
 }

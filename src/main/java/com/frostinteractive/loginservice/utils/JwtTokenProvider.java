@@ -5,9 +5,11 @@ import com.frostinteractive.loginservice.domain.UserPrincipal;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -21,6 +23,8 @@ public final class JwtTokenProvider {
 
         return Jwts.builder()
                 .setSubject(userPrincipal.getId())
+                .claim("authorities", authentication.getAuthorities().stream()
+                        .map(authority-> ((GrantedAuthority) authority).getAuthority()).collect(Collectors.toList()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtConfig.getExpiration()*1000))
                 .signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret())

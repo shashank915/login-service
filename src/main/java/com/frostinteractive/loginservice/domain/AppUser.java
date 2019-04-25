@@ -32,9 +32,6 @@ public class AppUser implements Serializable {
 	@Column(name = "mobile")
 	private String mobile;
 
-	@Column(name = "delete_state")
-	private boolean deleteState;
-
 	@Column(name = "profile_id")
 	private String profileId;
 
@@ -57,4 +54,5 @@ public class AppUser implements Serializable {
 	@Enumerated( EnumType.STRING)
 	@Column(name = "user_status")
 	private UserState userStatus;
+
 }

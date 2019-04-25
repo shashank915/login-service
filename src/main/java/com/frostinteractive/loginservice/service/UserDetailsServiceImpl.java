@@ -25,6 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
 	private AppUserRepository appUserRepository;
 
+	//This method is used by AuthenticationManager to authenticate the user.
 	@Override
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String emailOrMobileNo) throws UsernameNotFoundException {
