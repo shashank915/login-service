@@ -32,9 +32,6 @@ public class AppUser implements Serializable {
 	@Column(name = "mobile")
 	private String mobile;
 
-	@Column(name = "profile_id")
-	private String profileId;
-
 	@Column(name = "active")
 	private boolean active;
 
