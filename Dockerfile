@@ -9,5 +9,5 @@ RUN mvn clean package
 FROM openjdk:8-jre-alpine
 COPY --from=builder /app/target/login-service.jar app.jar
 
-RUN wget -O dd-java-agent.jar 'https://search.maven.org/classic/remote_content?g=com.datadoghq&a=dd-java-agent&v=LATEST'
-ENTRYPOINT ["java","-javaagent:dd-java-agent.jar","-jar","app.jar"]
+#RUN wget -O dd-java-agent.jar 'https://search.maven.org/classic/remote_content?g=com.datadoghq&a=dd-java-agent&v=LATEST'
+ENTRYPOINT ["java","-jar","app.jar"]
